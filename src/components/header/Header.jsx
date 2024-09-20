@@ -7,19 +7,21 @@ import { AutoComplete } from "antd";
 
 const Header = () => {
   const navigate = useNavigate();
-  const [searchValue, setSearchValue] = useState("")
+  const [searchValue, setSearchValue] = useState("");
   const { token } = useSelector((state) => state.auth);
   const { pathname } = useLocation();
-  const [searchProduct, {data}] = useSearchProductMutation();
+  const [searchProduct, { data }] = useSearchProductMutation();
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if(searchValue){
-      navigate(`/search?q=${searchValue}`)
+    if (searchValue.trim()) {
+      navigate(`/search?q=${searchValue}`);
     }
-  }
- 
-  if (pathname.includes("auth")) return;
+  };
+
+  // Agar auth sahifasi bo'lsa headerni ko'rsatmaymiz
+  if (pathname.includes("auth")) return null;
+
   return (
     <div className=" bg-blue-500 shadow-2xl">
       <nav className="w-[1200px] m-auto flex items-center justify-between p-2 gap-6">
@@ -32,30 +34,32 @@ const Header = () => {
                 <TbBrandGravatar className="text-yellow-600  absolute" />
               </span>
             </div>
-            <span className="font-bold  text-[22px]  left-[44px] mt-2 text-green-700">
-              M
-            </span>
+            <span className="font-bold text-[22px] left-[44px] mt-2 text-green-700">M</span>
           </div>
         </Link>
 
-       <form onSubmit={handleSearch}>
-       <AutoComplete
-          options={data?.payload?.map(product => ({ label: <Link key={product._id} to={`/products/${product._id}`}>{product.product_name}</Link>}))}
-          style={{
-            width: 200,
-          }}
-          onKeyDown={
-            (e) => {
-              if(e.code === "Enter"){
-                navigate(`/search?q=${searchValue}`)
+        <form onSubmit={handleSearch}>
+          <AutoComplete
+            options={data?.payload?.map((product) => ({
+              label: (
+                <Link key={product._id} to={`/products/${product._id}`}>
+                  {product.product_name}
+                </Link>
+              ),
+            }))}
+            style={{
+              width: 200,
+            }}
+            onKeyDown={(e) => {
+              if (e.code === "Enter" && searchValue.trim()) {
+                navigate(`/search?q=${searchValue}`);
               }
-            }
-          }
-          onChange={(value) => setSearchValue(value)}
-          onSearch={(text) => searchProduct(text)}
-          placeholder="input here"
-      />
-       </form>
+            }}
+            onChange={(value) => setSearchValue(value)}
+            onSearch={(text) => searchProduct(text)}
+            placeholder="input here"
+          />
+        </form>
 
         <ul className="flex gap-6">
           <li className="text-white">
@@ -69,11 +73,11 @@ const Header = () => {
           ) : (
             <>
               <li className="text-white">
-                <Link to={"auth/signUp"}>Register </Link>
+                <Link to={"auth/signUp"}>Register</Link>
               </li>
 
               <li className="text-white">
-                <Link to={"auth/login"}>Login </Link>
+                <Link to={"auth/login"}>Login</Link>
               </li>
             </>
           )}

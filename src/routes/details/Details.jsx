@@ -15,7 +15,7 @@ const Details = () => {
            {
             data && data.payload &&
             <div className="flex items-center mt-10 gap-10">
-            <div className="w-[400px] bg-blue-500 rounded-2xl">
+            <div className="w-[400px] bg-gray-200 shadow-2xl rounded-2xl">
             <Carousel arrows >
                 {
                     data && data?.payload.product_images.map(image => 
@@ -25,7 +25,7 @@ const Details = () => {
             </Carousel> 
             </div>
             <div className="flex flex-col">
-                <Title level={1}>{data.payload.product_name}</Title>
+                <Title  level={1}>{data.payload.product_name}</Title>
                 <Text className="w-[500px] mt-40">{data.payload.description}</Text>
             </div>
             </div>
